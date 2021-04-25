@@ -1,11 +1,11 @@
 import discord
 import os
 import time
-from random import *
+import random
 import discord.ext
 from discord.utils import get
 from discord.ext import commands, tasks
-from discord.ext.commands import has_permissions,  CheckFailure, check, CommandNotFound
+from discord.ext.commands import has_permissions, CheckFailure, check, CommandNotFound
 from itertools import cycle
 from keep_alive import keep_alive
 from lists import carslist
@@ -39,7 +39,7 @@ async def change_status():
 
 @client.command()
 async def ping(ctx):
-      await ctx.send(ping_cycle)
+      await ctx.send(next(ping_cycle))
 
 @client.command()
 async def test_me(ctx,):
@@ -92,7 +92,7 @@ async def memes(ctx):
 
 @client.command()
 async def impact(ctx):
-  if randint(0, 1) == 0:
+  if random.randint(0, 1) == 0:
     await ctx.send('hey {} go back to your country'.format(ctx.message.author.name))
   else: 
     await ctx.send('https://tenor.com/view/chainsaw-man-among-us-ass-gif-19571544')
@@ -106,4 +106,7 @@ async def help(ctx):
 async def cars(ctx):
   await ctx.send(random.choice(carslist))
 keep_alive()
-client.run(os.environ['TOKEN']) 
+
+
+
+client.run(os.environ['TOKEN'])
