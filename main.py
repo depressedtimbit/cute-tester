@@ -91,11 +91,6 @@ async def memes(ctx):
   await ctx.send(random.choice(memeslist))
 
 @client.command()
-async def impact(ctx):
-  user = await client.fetch_user(772045435731705867)
-  await ctx.send('``message censored by {}``'.format(user.name))
-
-@client.command()
 async def help(ctx):
   await ctx.send('look at this nerd they dont know the commands')
   await ctx.send('<:toffsmug:835669251243114526>')
