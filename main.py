@@ -1,7 +1,7 @@
 import discord
 import os
 import time
-import random
+from random import *
 import discord.ext
 from discord.utils import get
 from discord.ext import commands, tasks
@@ -16,7 +16,7 @@ client = discord.Client()
 client = commands.Bot(command_prefix = '!cute ', help_command=None) 
 
 ping_cycle = cycle(['fuck off','leave me alone','i said leave me alone','what do you want','am busy'])
-status = cycle(['with Python','fortnight','ur mom', 'TF2', 'the other TF2'])
+status = cycle(['with Python','fortnight','ur mom', 'TF2', 'the other TF2', 'poland more like pooland'])
 @client.event
 async def on_ready():
   change_status.start()
@@ -89,6 +89,13 @@ async def am_lonely(ctx):
 @client.command()
 async def memes(ctx):
   await ctx.send(random.choice(memeslist))
+
+@client.command()
+async def impact(ctx):
+  if randint(0, 1) == 0:
+    await ctx.send('hey {} go back to your country'.format(ctx.message.author.name))
+  else: 
+    await ctx.send('https://tenor.com/view/chainsaw-man-among-us-ass-gif-19571544')
 
 @client.command()
 async def help(ctx):
