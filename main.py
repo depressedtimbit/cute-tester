@@ -20,9 +20,6 @@ status = cycle(['with Python','fortnight','ur mom', 'TF2', 'the other TF2', 'pol
 async def on_ready():
 	change_status.start()
 	print("connected") 
-	if os.getenv('is_heroku') == '1':
-		user = await client.fetch_user(280116994622357506)
-		await user.send("bot online")
 @client.event 
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
@@ -42,6 +39,16 @@ async def change_status():
 @client.command()
 async def ping(ctx):
       await ctx.send(next(ping_cycle))
+
+@client.command()
+@commands.has_permissions(kick_members=True)
+async def kick(ctx, user: discord.Member, *, reason = None):
+  if not reason:
+    await user.kick()
+    await ctx.send(f"**{user}** has been kicked.")
+  else:
+    await user.kick(reason=reason)
+    await ctx.send(f"**{user}** has been kicked for **{reason}**.")
 
 @client.command()
 async def test_me(ctx,):
