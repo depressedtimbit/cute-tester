@@ -50,8 +50,9 @@ async def test_me(ctx,):
   else: await ctx.send('{} is pretty cool'.format(ctx.message.author.name))
 
 @client.command()
-async def mind_control(ctx, *, arg):
-  await ctx.send(arg)
+async def mind_control(ctx, arg1, arg2):
+	channel = await client.fetch_channel(arg2)
+	await channel.send(arg1)	
 
 @client.command()
 async def bot_nick(ctx, arg):
