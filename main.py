@@ -109,4 +109,4 @@ keep_alive()
 
 
 
-client.run(token)
+client.run(os.getenv("TOKEN"))
