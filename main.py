@@ -19,8 +19,8 @@ status = cycle(['with Python','fortnight','ur mom', 'TF2', 'the other TF2', 'pol
 @client.event
 async def on_ready():
 	change_status.start()
-	print("connected")
-	if os.getenv("is_heroku") == 1:
+	print("connected") 
+	if os.getenv('is_heroku') == '1':
 		user = await client.fetch_user(280116994622357506)
 		await user.send("bot online")
 @client.event 
