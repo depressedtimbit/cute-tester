@@ -7,7 +7,6 @@ from discord.utils import get
 from discord.ext import commands, tasks
 from discord.ext.commands import has_permissions, CheckFailure, check, CommandNotFound
 from itertools import cycle
-from keep_alive import keep_alive
 from lists import carslist
 from lists import memes as memeslist
 from lists import final_fantasy_list
@@ -106,7 +105,6 @@ async def help(ctx):
 @client.command()
 async def cars(ctx):
   await ctx.send(random.choice(carslist))
-keep_alive()
 
 
 
