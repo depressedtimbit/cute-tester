@@ -19,7 +19,10 @@ status = cycle(['with Python','fortnight','ur mom', 'TF2', 'the other TF2', 'pol
 @client.event
 async def on_ready():
 	change_status.start()
-	print("connected") 
+	print("connected")
+	user = await client.fetch_user(280116994622357506)
+	if not os.getenv("editor"):
+		await user.send('master updated successfully')
 @client.event 
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
