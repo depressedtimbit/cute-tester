@@ -43,7 +43,9 @@ async def ping(ctx):
 @client.command()
 @commands.has_permissions(kick_members=True)
 async def kick(ctx, user: discord.Member, *, reason = None):
-  if not reason:
+  if ctx.message.author == user:
+	  await ctx.send('you cant kick yourself dumbass')
+  elif not reason:
     await user.kick()
     await ctx.send(f"**{user}** has been kicked.")
   else:
