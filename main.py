@@ -19,9 +19,8 @@ status = cycle(['with Python','fortnight','ur mom', 'TF2', 'the other TF2', 'pol
 @client.event
 async def on_ready():
 	change_status.start()
-	print("connected")
-	user = await client.fetch_user(280116994622357506)
 	if not os.getenv("editor"):
+		user = await client.fetch_user(280116994622357506)
 		await user.send('master updated successfully')
 @client.event 
 async def on_command_error(ctx, error):
@@ -89,6 +88,12 @@ async def bot_nick_reset(ctx):
   else: 
      raise commands.MissingPermissions
     
+@client.command()
+@commands.has_permissions(administrator=True)
+async def clear(ctx, limit: int):
+        await ctx.channel.purge(limit=limit)
+        await ctx.send('{} messages Cleared by {}'.format(limit, ctx.author.mention))
+
 @client.command()
 async def FF(ctx):
   await ctx.send(random.choice(final_fantasy_list))
