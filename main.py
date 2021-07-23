@@ -7,6 +7,8 @@ from discord.utils import get
 from discord.ext import commands, tasks
 from discord.ext.commands import has_permissions, CheckFailure, check, CommandNotFound
 from itertools import cycle
+import aiohttp
+from io import BytesIO
 from lists import carslist
 from lists import memes as memeslist
 from lists import final_fantasy_list
@@ -15,13 +17,13 @@ client = discord.Client()
 client = commands.Bot(command_prefix = '!cute ', help_command=None) 
 
 ping_cycle = cycle(['fuck off','leave me alone','i said leave me alone','what do you want','am busy'])
-status = cycle(['with Python','fortnight','ur mom', 'TF2', 'the other TF2', 'poland more like pooland'])
-@client.event
-async def on_ready():
-	change_status.start()
-	if not os.getenv("editor"):
-		user = await client.fetch_user(280116994622357506)
-		await user.send('master updated successfully')
+status = cycle(['with Python','fortnight','ur mom', 'TF2', 'the other TF2'])
+#@client.event
+#async def on_ready():
+#	change_status.start()
+#	if not os.getenv("editor"):
+#		user = await client.fetch_user(280116994622357506)
+#		await user.send('master updated successfully')
 @client.event 
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
@@ -54,8 +56,9 @@ async def kick(ctx, user: discord.Member, *, reason = None):
     await user.kick(reason=reason)
     await ctx.send(f"**{user}** has been kicked for **{reason}**.")
 
-@client.command()
+@client.command(enabled=True)
 async def test_me(ctx,):
+  client.test_me(enabled=False)
   if ctx.message.author.id == 280116994622357506:
     await ctx.send('{} is really shit'.format(ctx.message.author.name))
   elif ctx.message.author.id == 310824231078330368:
@@ -126,6 +129,25 @@ async def help(ctx):
 async def cars(ctx):
   await ctx.send(random.choice(carslist))
 
-
+@client.command()
+async def create_emote(ctx, url: str, *, name):
+	guild = ctx.guild
+	if ctx.author.guild_permissions.manage_emojis:
+		async with aiohttp.ClientSession() as ses:
+			async with ses.get(url) as r:
+				
+				try:
+					img_or_gif = BytesIO(await r.read())
+					b_value = img_or_gif.getvalue()
+					if r.status in range(200, 299):
+						emoji = await guild.create_custom_emoji(image=b_value, name=name)
+						await ctx.send('Successfully created emoji')
+						await ses.close()
+					else:
+						await ctx.send('Error when making request')
+						await ses.close()
+						
+				except discord.HTTPException:
+					await ctx.send('File size is too thicc 😏')
 
 client.run(os.getenv("TOKEN"))
