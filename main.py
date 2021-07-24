@@ -27,13 +27,13 @@ status = cycle(['with Python','fortnight','ur mom', 'TF2', 'the other TF2'])
 @client.event 
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        await ctx.send('dumbass')
+        await ctx.message.reply('dumbass')
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send("Missing a required argument.")
+        await ctx.message.reply("Missing a required argument.")
     if isinstance(error, commands.MissingPermissions):
-        await ctx.send('{} is not based enough to do that'.format(ctx.message.author.name))
+        await ctx.message.reply('{} is not based enough to do that'.format(ctx.message.author.name))
     if isinstance(error, commands.BotMissingPermissions):
-        await ctx.send('1984')
+        await ctx.message.reply('1984')
     else:
         print(error) 
 @tasks.loop(seconds=10)
@@ -42,28 +42,27 @@ async def change_status():
 
 @client.command()
 async def ping(ctx):
-      await ctx.send(next(ping_cycle))
+      await ctx.message.reply(next(ping_cycle))
 
 @client.command()
 @commands.has_permissions(kick_members=True)
 async def kick(ctx, user: discord.Member, *, reason = None):
   if ctx.message.author == user:
-	  await ctx.send('you cant kick yourself dumbass')
+	  await ctx.message.reply('you cant kick yourself dumbass')
   elif not reason:
     await user.kick()
-    await ctx.send(f"**{user}** has been kicked.")
+    await ctx.message.reply(f"**{user}** has been kicked.")
   else:
     await user.kick(reason=reason)
-    await ctx.send(f"**{user}** has been kicked for **{reason}**.")
+    await ctx.message.reply(f"**{user}** has been kicked for **{reason}**.")
 
-@client.command(enabled=True)
+@client.command()
 async def test_me(ctx,):
-  client.test_me(enabled=False)
   if ctx.message.author.id == 280116994622357506:
-    await ctx.send('{} is really shit'.format(ctx.message.author.name))
+    await ctx.message.reply('{} is really shit'.format(ctx.message.author.name))
   elif ctx.message.author.id == 310824231078330368:
-    await ctx.send('{} is really cute'.format(ctx.message.author.name))
-  else: await ctx.send('{} is pretty cool'.format(ctx.message.author.name))
+    await ctx.message.reply('{} is really cute'.format(ctx.message.author.name))
+  else: await ctx.message.reply('{} is pretty cool'.format(ctx.message.author.name))
 
 @client.command()
 async def mind_control(ctx, arg1, arg2):
@@ -71,13 +70,13 @@ async def mind_control(ctx, arg1, arg2):
 	await channel.send(arg1)	
 
 @client.command()
-async def bot_nick(ctx, arg):
+async def bot_nick(ctx, *, arg):
   if ctx.message.author.id == 280116994622357506:
     try:
         await ctx.message.guild.me.edit(nick=arg)
-        await ctx.send('nickname changed to {}'.format(arg))
+        await ctx.message.reply('nickname changed to {}'.format(arg))
     except: 
-      await ctx.send('i cant change my own nickname, 1984')
+      await ctx.message.reply('i cant change my own nickname, 1984')
   else: 
     raise commands.MissingPermissions
 @client.command()
@@ -85,9 +84,9 @@ async def bot_nick_reset(ctx):
   if ctx.message.author.id == 280116994622357506:
     try:  
       await ctx.message.guild.me.edit(nick='cute tester')
-      await ctx.send('my nickname has been reset') 
+      await ctx.message.reply('my nickname has been reset') 
     except: 
-      await ctx.send('i cant change my own nickname, 1984')
+      await ctx.message.reply('i cant change my own nickname, 1984')
   else: 
      raise commands.MissingPermissions
     
@@ -95,15 +94,15 @@ async def bot_nick_reset(ctx):
 @commands.has_permissions(administrator=True)
 async def clear(ctx, limit: int):
         await ctx.channel.purge(limit=limit)
-        await ctx.send('{} messages Cleared by {}'.format(limit, ctx.author.mention))
+        await ctx.message.reply('{} messages Cleared by {}'.format(limit, ctx.author.mention))
 
 @client.command()
 async def FF(ctx):
-  await ctx.send(random.choice(final_fantasy_list))
+  await ctx.message.reply(random.choice(final_fantasy_list))
 
 @client.command()
 async def smile(ctx):
-  await ctx.send(file=discord.File('Sonrie.mp4'))
+  await ctx.message.reply(file=discord.File('Sonrie.mp4'))
 
 @client.command()
 async def am_lonely(ctx):
@@ -111,23 +110,23 @@ async def am_lonely(ctx):
   
 @client.command()
 async def memes(ctx):
-  await ctx.send(random.choice(memeslist))
+  await ctx.message.reply(random.choice(memeslist))
 
 @client.command()
 async def impact(ctx):
   if random.randint(0, 1) == 0:
-    await ctx.send('hey {} go back to your country'.format(ctx.message.author.name))
+    await ctx.message.reply('hey {} go back to your country'.format(ctx.message.author.name))
   else: 
-    await ctx.send('https://tenor.com/view/chainsaw-man-among-us-ass-gif-19571544')
+    await ctx.message.reply('https://tenor.com/view/chainsaw-man-among-us-ass-gif-19571544')
 
 @client.command()
 async def help(ctx):
-  await ctx.send('look at this nerd they dont know the commands')
-  await ctx.send('<:toffsmug:835669251243114526>')
+  await ctx.message.reply('look at this nerd they dont know the commands')
+  await ctx.message.reply('<:toffsmug:835669251243114526>')
 
 @client.command()
 async def cars(ctx):
-  await ctx.send(random.choice(carslist))
+  await ctx.message.reply(random.choice(carslist))
 
 @client.command()
 async def create_emote(ctx, url: str, *, name):
@@ -141,13 +140,13 @@ async def create_emote(ctx, url: str, *, name):
 					b_value = img_or_gif.getvalue()
 					if r.status in range(200, 299):
 						emoji = await guild.create_custom_emoji(image=b_value, name=name)
-						await ctx.send('Successfully created emoji')
+						await ctx.message.reply('Successfully created emoji')
 						await ses.close()
 					else:
-						await ctx.send('Error when making request')
+						await ctx.message.reply('Error when making request')
 						await ses.close()
 						
 				except discord.HTTPException:
-					await ctx.send('File size is too thicc 😏')
+					await ctx.message.reply('File size is too thicc 😏')
 
 client.run(os.getenv("TOKEN"))
