@@ -58,11 +58,13 @@ async def kick(ctx, user: discord.Member, *, reason = None):
 
 @client.command()
 async def test_me(ctx,):
-  if ctx.message.author.id == 280116994622357506:
+  test_rng = random.randint(1, 3)
+  if test_rng == 1:
     await ctx.message.reply('{} is really shit'.format(ctx.message.author.name))
-  elif ctx.message.author.id == 310824231078330368:
+  elif test_rng == 2:
     await ctx.message.reply('{} is really cute'.format(ctx.message.author.name))
-  else: await ctx.message.reply('{} is pretty cool'.format(ctx.message.author.name))
+  elif test_rng == 3:
+    await ctx.message.reply('{} is pretty cool'.format(ctx.message.author.name))
 
 @client.command()
 async def mind_control(ctx, arg1, arg2):
@@ -70,26 +72,18 @@ async def mind_control(ctx, arg1, arg2):
 	await channel.send(arg1)	
 
 @client.command()
-async def bot_nick(ctx, *, arg):
-  if ctx.message.author.id == 280116994622357506:
-    try:
+@commands.has_permissions(manage_nicknames=True)
+async def bot_nick(ctx, *, arg=None):
+  try:
+      if not arg:
+        await ctx.message.guild.me.edit(nick='cute tester')
+        await ctx.message.reply('my nickname has been reset')
+      else:
         await ctx.message.guild.me.edit(nick=arg)
-        await ctx.message.reply('nickname changed to {}'.format(arg))
-    except: 
+        await ctx.message.reply(f'nickname changed to {arg}')
+  except: 
       await ctx.message.reply('i cant change my own nickname, 1984')
-  else: 
-    raise commands.MissingPermissions
-@client.command()
-async def bot_nick_reset(ctx):
-  if ctx.message.author.id == 280116994622357506:
-    try:  
-      await ctx.message.guild.me.edit(nick='cute tester')
-      await ctx.message.reply('my nickname has been reset') 
-    except: 
-      await ctx.message.reply('i cant change my own nickname, 1984')
-  else: 
-     raise commands.MissingPermissions
-    
+
 @client.command()
 @commands.has_permissions(administrator=True)
 async def clear(ctx, limit: int):
@@ -129,17 +123,17 @@ async def cars(ctx):
   await ctx.message.reply(random.choice(carslist))
 
 @client.command()
+@commands.has_permissions(manage_emojis=True)
 async def create_emote(ctx, url: str, *, name):
 	guild = ctx.guild
-	if ctx.author.guild_permissions.manage_emojis:
-		async with aiohttp.ClientSession() as ses:
+	async with aiohttp.ClientSession() as ses:
 			async with ses.get(url) as r:
 				
 				try:
 					img_or_gif = BytesIO(await r.read())
 					b_value = img_or_gif.getvalue()
 					if r.status in range(200, 299):
-						emoji = await guild.create_custom_emoji(image=b_value, name=name)
+						await guild.create_custom_emoji(image=b_value, name=name)
 						await ctx.message.reply('Successfully created emoji')
 						await ses.close()
 					else:
