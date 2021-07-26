@@ -146,12 +146,26 @@ async def create_emote(ctx, url: str, *, name):
 					await ctx.message.reply('File size is too thicc 😏')
 
 @client.command()
-async def dice(ctx, arg:int=None):
-  if not arg:
-    arg = 20
-  dice_rng = random.randint(1, arg)
-  await ctx.message.reply(f'rolling a D{arg}...')
-  await asyncio.sleep(1)
-  await ctx.send(f'you got a {dice_rng}')
+async def dice(ctx, arg=None):
+  try:
+    if not arg:
+      dietype = int(20)
+      dieroll = int(1)
+      arg = 'd20'
+    else: 
+      arg = arg.lower()
+      dieroll,dietype = arg.split("d", 2)
+      if not dieroll: dieroll = 1
+      dieroll = int(dieroll)
+      dietype = int(dietype)
+    if dieroll > 10: dieroll = 10
+    await ctx.message.reply(f'rolling a {dieroll}d{dietype}...')
+    while dieroll > 0:
+      dice_rng = random.randint(1, dietype)
+      await asyncio.sleep(1)
+      await ctx.send(dice_rng)
+      dieroll = dieroll - 1
+  except:
+    await ctx.message.reply('you messed it up bro you gonna do it like dnd style')
 
 client.run(os.getenv("TOKEN"))
