@@ -146,18 +146,13 @@ async def create_emote(ctx, url: str, *, name):
 					await ctx.message.reply('File size is too thicc 😏')
 
 @client.command()
-async def dice(ctx, arg=None):
-  try:
-    if not arg:
-      dietype = int(20)
-      dieroll = int(1)
-      arg = 'd20'
-    else: 
-      arg = arg.lower()
-      dieroll,dietype = arg.split("d", 2)
-      if not dieroll: dieroll = 1
-      dieroll = int(dieroll)
-      dietype = int(dietype)
+async def dice(ctx, arg="d20"):
+  try: 
+    arg = arg.lower()
+    dieroll,dietype = arg.split("d", 2)
+    if not dieroll: dieroll = 1
+    dieroll = int(dieroll)
+    dietype = int(dietype)
     if dieroll > 10: dieroll = 10
     await ctx.message.reply(f'rolling a {dieroll}d{dietype}...')
     while dieroll > 0:
