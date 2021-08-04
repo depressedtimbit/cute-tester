@@ -37,6 +37,10 @@ async def on_command_error(ctx, error):
     else:
         print(error) 
 
+@client.event
+async def on_ready():
+	change_status.start()
+
 @tasks.loop(seconds=10)
 async def change_status():
   await client.change_presence(activity=discord.Game(next(status)))
