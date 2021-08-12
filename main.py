@@ -6,7 +6,7 @@ from itertools import cycle
 client = discord.Client()
 
 client = commands.Bot(
-command_prefix = '!cute ',
+command_prefix = commands.when_mentioned_or('!cute '),
 help_command = None,
 allowed_mentions = discord.AllowedMentions(
   users=False, 
