@@ -42,7 +42,7 @@ async def on_ready():
 	change_status.start()
 
 @client.command()
-@commands.is_owner()
+@client.is_owner()
 async def die(ctx):
   await ctx.send("<:qtdie:878143099430400032>")
   for file in os.listdir("cogs"):
