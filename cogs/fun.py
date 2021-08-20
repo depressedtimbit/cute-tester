@@ -33,6 +33,7 @@ class fun(commands.Cog):
   @commands.command()
   async def am_lonely(self, ctx):
    await ctx.message.author.send('ha loser')
+   await ctx.message.add_reaction(':jahysmile:871869041709572137')
   
   @commands.command()
   async def memes(self, ctx):
