@@ -30,7 +30,7 @@ async def on_command_error(ctx, error):
         await ctx.message.reply('dumbass')
     elif isinstance(error, commands.MissingRequiredArgument):
         await ctx.message.reply("Missing a required argument.")
-    elif isinstance(error, commands.MissingPermissions):
+    elif isinstance(error, commands.MissingPermissions or commands.NotOwner):
         await ctx.message.reply(f'{ctx.message.author.name} is not based enough to do that')
     elif isinstance(error, commands.BotMissingPermissions):
         await ctx.message.reply('1984')
@@ -42,7 +42,7 @@ async def on_ready():
 	change_status.start()
 
 @client.command()
-@client.is_owner()
+@commands.is_owner()
 async def die(ctx):
   await ctx.send("<:qtdie:878143099430400032>")
   for file in os.listdir("cogs"):
