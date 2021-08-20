@@ -30,7 +30,9 @@ async def on_command_error(ctx, error):
         await ctx.message.reply('dumbass')
     elif isinstance(error, commands.MissingRequiredArgument):
         await ctx.message.reply("Missing a required argument.")
-    elif isinstance(error, commands.MissingPermissions or commands.NotOwner):
+    elif isinstance(error, commands.MissingPermissions):
+        await ctx.message.reply(f'{ctx.message.author.name} is not based enough to do that')
+    elif isinstance(error, commands.NotOwner):
         await ctx.message.reply(f'{ctx.message.author.name} is not based enough to do that')
     elif isinstance(error, commands.BotMissingPermissions):
         await ctx.message.reply('1984')
