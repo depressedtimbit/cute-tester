@@ -41,6 +41,16 @@ async def on_command_error(ctx, error):
 async def on_ready():
 	change_status.start()
 
+@client.command()
+@commands.is_owner()
+async def die(ctx):
+  await ctx.send("<:qtdie:878143099430400032>")
+  for file in os.listdir("cogs"):
+    if file.endswith(".py"):
+        name = file[:-3]
+        client.reload_extension(f"cogs.{name}")
+        await ctx.send(f'reloaded {name}')
+
 @tasks.loop(seconds=10)
 async def change_status():
   await client.change_presence(activity=discord.Game(next(status)))
