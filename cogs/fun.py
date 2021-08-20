@@ -67,6 +67,10 @@ class fun(commands.Cog):
         dieroll = dieroll - 1
     except:
      await ctx.message.reply('you messed it up bro you gonna do it like dnd style')
+  @commands.command()
+  async def cock(self, ctx):
+    await ctx.message.add_reaction("🐓")
+
 
 def setup(bot):
     bot.add_cog(fun(bot))
