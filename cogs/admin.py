@@ -3,6 +3,7 @@ from discord.ext import commands
 import aiohttp
 from io import BytesIO
 from itertools import cycle
+import os
 
 ping_cycle = cycle(['fuck off','leave me alone','i said leave me alone','what do you want','am busy'])
 
@@ -56,6 +57,16 @@ class admin(commands.Cog):
           await ctx.message.reply(f'nickname changed to  {arg}')
     except: 
         await ctx.message.reply('i cant change my own  nickname, 1984')
+
+  @commands.command()
+  @commands.is_owner()
+  async def die(self, ctx):
+    await ctx.send("<:qtdie:878143099430400032>")
+    for file in os.listdir("cogs"):
+     if file.endswith(".py"):
+          name = file[:-3]
+          self.bot.reload_extension(f"cogs.{name}")
+          await ctx.send(f'reloaded {name}')
 
   @commands.command()
   @commands.has_permissions(manage_emojis=True)
