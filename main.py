@@ -28,11 +28,11 @@ status = cycle(['fortnight','ur mom', 'TF2', 'the other TF2'])
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.message.reply('dumbass')
-    if isinstance(error, commands.MissingRequiredArgument):
+    elif isinstance(error, commands.MissingRequiredArgument):
         await ctx.message.reply("Missing a required argument.")
-    if isinstance(error, commands.MissingPermissions):
+    elif isinstance(error, commands.MissingPermissions):
         await ctx.message.reply(f'{ctx.message.author.name} is not based enough to do that')
-    if isinstance(error, commands.BotMissingPermissions):
+    elif isinstance(error, commands.BotMissingPermissions):
         await ctx.message.reply('1984')
     else:
         print(error) 
