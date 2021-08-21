@@ -47,4 +47,7 @@ async def on_ready():
 async def change_status():
   await client.change_presence(activity=discord.Game(next(status)))
 
-client.run(os.getenv("TOKEN"))
+try:
+    client.run(os.environ["TOKEN"])
+except KeyError: 
+    print("TOKEN does not exist")
