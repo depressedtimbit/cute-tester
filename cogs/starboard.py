@@ -4,11 +4,30 @@ from discord.ext import commands
 from discord.utils import get
 import sqlite3
 
+async def starboard_message(message, channel, og_channel, star_amount):
+        db = sqlite3.connect('main.sqlite')
+        cursor = db.cursor()
+        cursor.execute(f'SELECT new_msg_id FROM starboard_messages WHERE old_msg_id = {message.id}')
+        new_message_id = cursor.fetchone()
+        if not new_message_id:
+            embed = discord.Embed(title=message.content)
+            embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
+            new_message = await channel.send(embed=embed, content=f':dizzy: **{star_amount}** {og_channel.mention}')
+            db.execute(f"INSERT INTO starboard_messages(old_msg_id, new_msg_id) VALUES({message.id},{new_message.id})")
+            db.commit()
+            db.close
+        else:
+            embed = discord.Embed(title=message.content)
+            embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
+            new_message = await channel.fetch_message(new_message_id[0])
+            await new_message.edit(embed=embed, content=f':dizzy: **{star_amount}** {og_channel.mention}')
+            db.close
+
 class starboard(commands.Cog):
   
     def __init__(self, bot: commands.Bot):
             self.bot = bot
-    
+
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         db = sqlite3.connect('main.sqlite')
@@ -23,11 +42,41 @@ class starboard(commands.Cog):
                 reaction = get(message.reactions, emoji=payload.emoji.name)
                 if reaction and reaction.count >= result[4]:
                     if not result[3]:
-                        await wbchannel.send(message.content)
+                        await starboard_message(message, wbchannel, channel, reaction.count)
                     elif not payload.member == message.author:
-                        await wbchannel.send(message.content)
+                        await starboard_message(message, wbchannel, channel, reaction.count)
 
-    
+    @commands.Cog.listener()
+    async def on_raw_reaction_remove(self, payload):
+        print("reaction gone")
+        db = sqlite3.connect('main.sqlite')
+        cursor = db.cursor()
+        cursor.execute(f'SELECT * FROM starboard WHERE guild_id = {payload.guild_id}')
+        result = cursor.fetchone()
+        channel = await self.bot.fetch_channel(payload.channel_id)
+        message = await channel.fetch_message(payload.message_id)
+        wbchannel = await self.bot.fetch_channel(result[1])
+        if result[2]:
+            print('check1')
+            if payload.emoji.name == "⭐":
+                print('check2')
+                reaction = get(message.reactions, emoji=payload.emoji.name)
+                print(reaction)
+                if not reaction or reaction.count < result[4]:
+                    print('check3')
+                    if not result[3]:
+                        cursor.execute(f'SELECT new_msg_id FROM starboard_messages WHERE old_msg_id = {message.id}')
+                        new_message_id = cursor.fetchone()
+                        new_message = await wbchannel.fetch_message(new_message_id[0])
+                        await new_message.delete()
+                        print('msg deleteus')
+                    elif not payload.member == message.author:
+                        cursor.execute(f'SELECT new_msg_id FROM starboard_messages WHERE old_msg_id = {message.id}')
+                        new_message_id = cursor.fetchone
+                        new_message = await wbchannel.fetch_message(new_message_id[0])
+                        await self.delete_message(new_message)
+                        print('msg deleteus')
+        
     @commands.group(invoke_without_command=True)
     @commands.has_permissions(manage_messages=True)
     async def starboard(self, ctx):
