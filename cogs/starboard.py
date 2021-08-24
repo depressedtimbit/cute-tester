@@ -134,14 +134,14 @@ class starboard(commands.Cog):
                     db.close()
             elif arg.lower() == "enable":
                 sql = (f"UPDATE starboard SET self_star = 1 WHERE guild_id = {ctx.guild.id}")
-                await ctx.message.reply(f"self stars in this server has been enabled")
+                await ctx.message.reply(f"self stars in this server have been enabled")
                 cursor.execute(sql)
                 db.commit()
                 cursor.close()
                 db.close()
             elif arg.lower() == "disable":
                 sql = (f"UPDATE starboard SET self_star = 0 WHERE guild_id = {ctx.guild.id}")
-                await ctx.message.reply(f"self stars in this server has been disabled")
+                await ctx.message.reply(f"self stars in this server have been disabled")
                 cursor.execute(sql)
                 db.commit()
                 cursor.close()
