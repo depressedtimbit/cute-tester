@@ -57,26 +57,19 @@ class starboard(commands.Cog):
         message = await channel.fetch_message(payload.message_id)
         wbchannel = await self.bot.fetch_channel(result[1])
         if result[2]:
-            print('check1')
             if payload.emoji.name == "⭐":
-                print('check2')
                 reaction = get(message.reactions, emoji=payload.emoji.name)
-                print(reaction)
                 if not reaction or reaction.count < result[4]:
-                    print('check3')
                     if not result[3]:
                         cursor.execute(f'SELECT new_msg_id FROM starboard_messages WHERE old_msg_id = {message.id}')
                         new_message_id = cursor.fetchone()
                         new_message = await wbchannel.fetch_message(new_message_id[0])
                         await new_message.delete()
-                        print('msg deleteus')
                     elif not payload.member == message.author:
                         cursor.execute(f'SELECT new_msg_id FROM starboard_messages WHERE old_msg_id = {message.id}')
                         new_message_id = cursor.fetchone
                         new_message = await wbchannel.fetch_message(new_message_id[0])
                         await self.delete_message(new_message)
-                        print('msg deleteus')
-        
     @commands.group(invoke_without_command=True)
     @commands.has_permissions(manage_messages=True)
     async def starboard(self, ctx):
