@@ -151,6 +151,5 @@ class starboard(commands.Cog):
                 cursor.close()
                 db.close()
 
-
 def setup(bot):
     bot.add_cog(starboard(bot))
