@@ -29,9 +29,10 @@ class starboard(commands.Cog):
 
     
     @commands.group(invoke_without_command=True)
+    @commands.has_permissions(manage_messages=True)
     async def starboard(self, ctx):
         await ctx.message.reply(
-            'Availble Setup Commands \nstarboard channel: `!cute starboard channel <channel>`\nenable and disable: `!cute enable/disable`'
+            'Availble Setup Commands \nstarboard channel: `!cute starboard channel <channel>`\nenable and disable: `!cute starboard enable/disable`\nstar amount `!cute starboard set_star_amount <number>`\nenable self stars `!cute starboard self_star <enable/disable>`'
             )
     
     @starboard.command()
