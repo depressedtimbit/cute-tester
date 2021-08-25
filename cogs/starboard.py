@@ -5,7 +5,7 @@ from discord.ext import commands
 from discord.utils import get
 import sqlite3
 
-async def starboard_message(message, channel, og_channel, star_amount):
+async def starboard_message(message, wbchannel, channel, star_amount):
         db = sqlite3.connect('main.sqlite')
         cursor = db.cursor()
         cursor.execute(f'SELECT new_msg_id FROM starboard_messages WHERE old_msg_id = {message.id}')
@@ -14,7 +14,7 @@ async def starboard_message(message, channel, og_channel, star_amount):
             embed = discord.Embed(title=message.content)
             embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
             embed.add_field(name="**orginal**", value=f'[jump](https://discord.com/channels/{message.guild.id}/{channel.id}/{message.id})')
-            new_message = await channel.send(embed=embed, content=f':dizzy: **{star_amount}** {og_channel.mention}')
+            new_message = await wbchannel.send(embed=embed, content=f':dizzy: **{star_amount}** {channel.mention}')
             db.execute(f"INSERT INTO starboard_messages(old_msg_id, new_msg_id) VALUES({message.id},{new_message.id})")
             db.commit()
             db.close()
@@ -23,14 +23,14 @@ async def starboard_message(message, channel, og_channel, star_amount):
                 embed = discord.Embed(title=message.content)
                 embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
                 embed.add_field(name="**orginal**", value=f'[jump](https://discord.com/channels/{message.guild.id}/{channel.id}/{message.id})')
-                new_message = await channel.fetch_message(new_message_id[0])
-                await new_message.edit(embed=embed, content=f':dizzy: **{star_amount}** {og_channel.mention}')
+                new_message = await wbchannel.fetch_message(new_message_id[0])
+                await new_message.edit(embed=embed, content=f':dizzy: **{star_amount}** {channel.mention}')
                 db.close()
             except discord.errors.NotFound:
                 cursor.execute(f"DELETE FROM starboard_messages WHERE new_msg_id = {new_message_id[0]}")
                 db.commit()
                 db.close()
-                await starboard_message(message, og_channel, channel, star_amount)
+                await starboard_message(message, wbchannel, channel, star_amount)
 
 class starboard(commands.Cog):
   
