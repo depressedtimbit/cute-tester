@@ -14,6 +14,8 @@ async def starboard_message(message, wbchannel, channel, star_amount):
             embed = discord.Embed(title=message.content)
             embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
             embed.add_field(name="**orginal**", value=f'[jump](https://discord.com/channels/{message.guild.id}/{channel.id}/{message.id})')
+            url=message.attachments
+            if message.attachments: embed.set_image(url=url[0].url)
             new_message = await wbchannel.send(embed=embed, content=f':dizzy: **{star_amount}** {channel.mention}')
             db.execute(f"INSERT INTO starboard_messages(old_msg_id, new_msg_id) VALUES({message.id},{new_message.id})")
             db.commit()
@@ -23,8 +25,8 @@ async def starboard_message(message, wbchannel, channel, star_amount):
                 embed = discord.Embed(title=message.content)
                 embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
                 embed.add_field(name="**orginal**", value=f'[jump](https://discord.com/channels/{message.guild.id}/{channel.id}/{message.id})')
-                url = message.attachments.url 
-                if url: embed.set_image(url=url)
+                url=message.attachments
+                if message.attachments: embed.set_image(url=url[0].url)
                 new_message = await wbchannel.fetch_message(new_message_id[0])
                 await new_message.edit(embed=embed, content=f':dizzy: **{star_amount}** {channel.mention}')
                 db.close()
