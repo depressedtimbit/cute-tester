@@ -13,18 +13,24 @@ async def starboard_message(message, channel, og_channel, star_amount):
         if not new_message_id:
             embed = discord.Embed(title=message.content)
             embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
-            embed.add_field(name="**orginal**", value='[jump](https://youtu.be/dQw4w9WgXcQ)')
+            embed.add_field(name="**orginal**", value=f'[jump](https://discord.com/channels/{message.guild.id}/{channel.id}/{message.id})')
             new_message = await channel.send(embed=embed, content=f':dizzy: **{star_amount}** {og_channel.mention}')
             db.execute(f"INSERT INTO starboard_messages(old_msg_id, new_msg_id) VALUES({message.id},{new_message.id})")
             db.commit()
-            db.close
+            db.close()
         else:
-            embed = discord.Embed(title=message.content)
-            embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
-            embed.add_field(name="**orginal**", value='[jump](https://youtu.be/dQw4w9WgXcQ)')
-            new_message = await channel.fetch_message(new_message_id[0])
-            await new_message.edit(embed=embed, content=f':dizzy: **{star_amount}** {og_channel.mention}')
-            db.close
+            try:
+                embed = discord.Embed(title=message.content)
+                embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
+                embed.add_field(name="**orginal**", value=f'[jump](https://discord.com/channels/{message.guild.id}/{channel.id}/{message.id})')
+                new_message = await channel.fetch_message(new_message_id[0])
+                await new_message.edit(embed=embed, content=f':dizzy: **{star_amount}** {og_channel.mention}')
+                db.close()
+            except discord.errors.NotFound:
+                cursor.execute(f"DELETE FROM starboard_messages WHERE new_msg_id = {new_message_id[0]}")
+                db.commit()
+                db.close()
+                await starboard_message(message, og_channel, channel, star_amount)
 
 class starboard(commands.Cog):
   
@@ -63,17 +69,29 @@ class starboard(commands.Cog):
                 reaction = get(message.reactions, emoji=payload.emoji.name)
                 if not reaction or reaction.count < result[4]:
                     if not result[3]:
-                        cursor.execute(f'SELECT new_msg_id FROM starboard_messages WHERE old_msg_id = {message.id}')
-                        new_message_id = cursor.fetchone()
-                        new_message = await wbchannel.fetch_message(new_message_id[0])
-                        await new_message.delete()
+                        try:
+                            cursor.execute(f'SELECT new_msg_id FROM starboard_messages WHERE old_msg_id = {message.id}')
+                            new_message_id = cursor.fetchone()
+                            new_message = await wbchannel.fetch_message(new_message_id[0])
+                            await new_message.delete()
+                        except discord.errors.NotFound: 
+                            cursor.execute(f"DELETE FROM starboard_messages WHERE new_msg_id = {new_message_id[0]}")
+                            db.commit()
+                            db.close()
                     elif not payload.member == message.author:
-                        cursor.execute(f'SELECT new_msg_id FROM starboard_messages WHERE old_msg_id = {message.id}')
-                        new_message_id = cursor.fetchone()
-                        new_message = await wbchannel.fetch_message(new_message_id[0])
-                        await new_message.delete()
+                        try:
+                            cursor.execute(f'SELECT new_msg_id FROM starboard_messages WHERE old_msg_id = {message.id}')
+                            new_message_id = cursor.fetchone()
+                            new_message = await wbchannel.fetch_message(new_message_id[0])
+                            await new_message.delete()
+                        except discord.errors.NotFound: 
+                            cursor.execute(f"DELETE FROM starboard_messages WHERE new_msg_id = {new_message_id[0]}")
+                            db.commit()
+                            db.close()
+                        
                 else:
                     await starboard_message(message, wbchannel, channel, reaction.count)
+    
     @commands.group(invoke_without_command=True)
     @commands.has_permissions(manage_messages=True)
     async def starboard(self, ctx):
