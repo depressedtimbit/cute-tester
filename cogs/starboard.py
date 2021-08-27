@@ -5,13 +5,14 @@ from discord.ext import commands
 from discord.utils import get
 import sqlite3
 
-async def starboard_message(message, wbchannel, channel, star_amount):
+async def starboard_message(self, message, wbchannel, channel, star_amount):
         db = sqlite3.connect('main.sqlite')
         cursor = db.cursor()
         cursor.execute(f'SELECT new_msg_id FROM starboard_messages WHERE old_msg_id = {message.id}')
         new_message_id = cursor.fetchone()
         if not new_message_id:
-            embed = discord.Embed(title=message.content)
+            member = await channel.guild.fetch_member(message.author.id)
+            embed = discord.Embed(title=message.content, colour=member.color)
             embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
             embed.add_field(name="**orginal**", value=f'[jump](https://discord.com/channels/{message.guild.id}/{channel.id}/{message.id})')
             url=message.attachments
@@ -22,7 +23,8 @@ async def starboard_message(message, wbchannel, channel, star_amount):
             db.close()
         else:
             try:
-                embed = discord.Embed(title=message.content)
+                member = await channel.guild.fetch_member(message.author.id)
+                embed = discord.Embed(title=message.content, colour=member.color)
                 embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
                 embed.add_field(name="**orginal**", value=f'[jump](https://discord.com/channels/{message.guild.id}/{channel.id}/{message.id})')
                 url=message.attachments
@@ -34,7 +36,7 @@ async def starboard_message(message, wbchannel, channel, star_amount):
                 cursor.execute(f"DELETE FROM starboard_messages WHERE new_msg_id = {new_message_id[0]}")
                 db.commit()
                 db.close()
-                await starboard_message(message, wbchannel, channel, star_amount)
+                await starboard_message(self, message, wbchannel, channel, star_amount)
 
 class starboard(commands.Cog):
   
@@ -55,9 +57,9 @@ class starboard(commands.Cog):
                 reaction = get(message.reactions, emoji=payload.emoji.name)
                 if reaction and reaction.count >= result[4]:
                     if result[3]:
-                        await starboard_message(message, wbchannel, channel, reaction.count)
+                        await starboard_message(self, message, wbchannel, channel, reaction.count)
                     elif not payload.member == message.author:
-                        await starboard_message(message, wbchannel, channel, reaction.count)
+                        await starboard_message(self, message, wbchannel, channel, reaction.count)
 
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
@@ -94,7 +96,7 @@ class starboard(commands.Cog):
                             db.close()
                         
                 else:
-                    await starboard_message(message, wbchannel, channel, reaction.count)
+                    await starboard_message(self, message, wbchannel, channel, reaction.count)
     
     @commands.group(invoke_without_command=True)
     @commands.has_permissions(manage_messages=True)
