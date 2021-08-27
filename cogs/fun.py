@@ -68,9 +68,10 @@ class fun(commands.Cog):
     except:
      await ctx.message.reply('you messed it up bro you gonna do it like dnd style')
 
-  @commands.command()
-  async def cock(self, ctx):
-    await ctx.message.add_reaction("🐓")
+  @commands.Cog.listener()
+  async def on_message(self, message):
+    if "cock" in message.content.lower():
+      await message.add_reaction("🐓")
 
 
 def setup(bot):
