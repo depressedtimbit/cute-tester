@@ -15,6 +15,7 @@ async def starboard_message(self, message, wbchannel, channel, star_amount):
             embed = discord.Embed(title=message.content, colour=member.color)
             embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
             embed.add_field(name="**orginal**", value=f'[jump](https://discord.com/channels/{message.guild.id}/{channel.id}/{message.id})')
+            embed.timestamp = message.created_at
             url=message.attachments
             if message.attachments: embed.set_image(url=url[0].url)
             new_message = await wbchannel.send(embed=embed, content=f':dizzy: **{star_amount}** {channel.mention}')
@@ -27,6 +28,7 @@ async def starboard_message(self, message, wbchannel, channel, star_amount):
                 embed = discord.Embed(title=message.content, colour=member.color)
                 embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
                 embed.add_field(name="**orginal**", value=f'[jump](https://discord.com/channels/{message.guild.id}/{channel.id}/{message.id})')
+                embed.timestamp = message.created_at
                 url=message.attachments
                 if message.attachments: embed.set_image(url=url[0].url)
                 new_message = await wbchannel.fetch_message(new_message_id[0])
