@@ -22,6 +22,7 @@ class admin(commands.Cog):
     await ctx.send('<:toffsmug:835669251243114526>')
 
   @commands.command()
+  @commands.is_owner()
   async def mind_control(self, ctx, arg1, arg2:int):
     print(arg2)
     channel = await self.bot.fetch_channel(arg2)
