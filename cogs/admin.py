@@ -22,6 +22,16 @@ class admin(commands.Cog):
     await ctx.send('<:toffsmug:835669251243114526>')
 
   @commands.command()
+  async def servers(self, ctx):
+    if ctx.author.id == self.bot.owner_id:
+      msg = f"currently in {len(list(self.bot.guilds))} servers:\n"
+      for item in list(self.bot.guilds):
+        msg = msg + item.name + "\n"
+      await ctx.message.reply(msg)
+    else:
+      msg = f"currently in {len(list(self.bot.guilds))} servers\n"
+      await ctx.message.reply(msg)
+  @commands.command()
   @commands.is_owner()
   async def mind_control(self, ctx, arg1, arg2:int):
     print(arg2)
