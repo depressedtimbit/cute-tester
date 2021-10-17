@@ -23,14 +23,17 @@ class admin(commands.Cog):
 
   @commands.command()
   async def servers(self, ctx):
-    if ctx.author.id == self.bot.owner_id:
-      msg = f"currently in {len(list(self.bot.guilds))} servers:\n"
-      for item in list(self.bot.guilds):
+    msg = f"currently in {len(list(self.bot.guilds))} servers\n"
+    await ctx.message.reply(msg)
+    
+  @commands.command()
+  @commands.is_owner()
+  async def servers_list(self,ctx):
+    msg = f"currently in {len(list(self.bot.guilds))} servers:\n"
+    for item in list(self.bot.guilds):
         msg = msg + item.name + "\n"
-      await ctx.message.reply(msg)
-    else:
-      msg = f"currently in {len(list(self.bot.guilds))} servers\n"
-      await ctx.message.reply(msg)
+    await ctx.message.reply(msg)
+
   @commands.command()
   @commands.is_owner()
   async def mind_control(self, ctx, arg1, arg2:int):
