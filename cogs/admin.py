@@ -12,9 +12,9 @@ class admin(commands.Cog):
   def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-  @commands.command()
+  @commands.slash_command(guild_ids=[525396614580273227])
   async def ping(self, ctx):
-        await ctx.message.reply(next(ping_cycle))
+        await ctx.respond(next(ping_cycle))
 
   @commands.command()
   async def help(self, ctx):
