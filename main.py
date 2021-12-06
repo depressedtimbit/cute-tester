@@ -20,7 +20,7 @@ allowed_mentions = discord.AllowedMentions(
   )
 )
 
-for file in os.listdir("cogs"):
+for file in os.listdir(".cogs"):
     if file.endswith(".py"):
         name = file[:-3]
         client.load_extension(f"cogs.{name}")
