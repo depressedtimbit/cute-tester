@@ -19,7 +19,6 @@ allowed_mentions = discord.AllowedMentions(
   replied_user=False
   )
 )
-
 for file in os.listdir(".cogs"):
     if file.endswith(".py"):
         name = file[:-3]
