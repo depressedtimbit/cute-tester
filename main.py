@@ -19,10 +19,10 @@ allowed_mentions = discord.AllowedMentions(
   replied_user=False
   )
 )
-for file in os.listdir(".cogs"):
+for file in os.listdir("cogs"):
     if file.endswith(".py"):
         name = file[:-3]
-        client.load_extension(f".cogs.{name}")
+        client.load_extension(f"cogs.{name}")
         print(f'loaded {name}')
 
 status = cycle(['fortnight','ur mom', 'TF2', 'the other TF2'])
