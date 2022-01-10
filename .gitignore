@@ -6,5 +6,5 @@ cogs/__pycache__/fun.cpython-39.pyc
 .vscode/launch.json
 cogs/__pycache__/starboard.cpython-39.pyc
 main.sqlite
-
+__pycache__/
 cogs/__pycache__/social_credit.cpython-39.pyc
