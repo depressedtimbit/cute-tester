@@ -7,4 +7,6 @@ cogs/__pycache__/fun.cpython-39.pyc
 cogs/__pycache__/starboard.cpython-39.pyc
 main.sqlite
 virt/*
+__pycache__/
 cogs/__pycache__/social_credit.cpython-39.pyc
+__pycache__/keep_alive.cpython-38.pyc
