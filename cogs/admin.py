@@ -45,7 +45,7 @@ class admin(commands.Cog):
   @commands.has_permissions(kick_members=True)
   async def kick(self, ctx, user: discord.Member, *, reason = None):
     if ctx.message.author == user:
-	    await ctx.message.reply('you cant kick yourself dumbass')
+      await ctx.message.reply('you cant kick yourself dumbass')
     elif not reason:
       await user.kick()
       await ctx.message.reply(f"**{user}** has been kicked.")
@@ -75,23 +75,23 @@ class admin(commands.Cog):
   @commands.command()
   @commands.has_permissions(manage_emojis=True)
   async def create_emote(self, ctx, url: str, *, name):
-	  guild = ctx.guild
-	  async with aiohttp.ClientSession() as ses:
-		  	async with ses.get(url) as r:
-        
-  				try:
-  					img_or_gif = BytesIO(await r.read())
-  					b_value = img_or_gif.getvalue()
-  					if r.status in range(200, 299):
-  						await guild.create_custom_emoji(image=b_value, name=name)
-  						await ctx.message.reply('Successfully created emoji')
-  						await ses.close()
-  					else:
-  						await ctx.message.reply('Error when making request')
-  						await ses.close()
-  
-  				except discord.HTTPException:
-  					await ctx.message.reply('File size is too thicc 😏')
+    guild = ctx.guild
+    async with aiohttp.ClientSession() as ses:
+          
+          async with ses.get(url) as r:
+            try:
+              img_or_gif = BytesIO(await r.read())
+              b_value = img_or_gif.getvalue()
+              if r.status in range(200, 299):
+                await guild.create_custom_emoji(image=b_value, name=name)
+                await ctx.message.reply('Successfully created emoji')
+                await ses.close()
+              else:
+                await ctx.message.reply('Error when making request')
+                await ses.close()
+          
+            except discord.HTTPException:
+              await ctx.message.reply('File is too thicc 😏')
 
   @commands.command()
   @commands.is_owner()
