@@ -40,7 +40,7 @@ async def on_command_error(ctx, error):
     elif isinstance(error, commands.BotMissingPermissions):
         await ctx.send('1984')
     else:
-        ctx.send(error) 
+        await ctx.send(error) 
 
 @client.event
 async def on_ready():
