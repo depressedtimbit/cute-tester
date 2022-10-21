@@ -12,10 +12,10 @@ class social_credit(commands.Cog):
     async def on_message(self, ctx):
         content = ctx.content.lower()
         if content in bad_citizen:
-            await ctx.reply('MESSAGE FROM THE MINISTRY OF STATE\n(我们的) 100 Social Credits have been removed from your account!  Bad work citizen, Do not publicly disclose your opinion which can make our holy state look bad. Glory to the Chinese Communist Party! https://cdn.discordapp.com/attachments/763740330629398588/865242744162484254/CCP.mp4')
+            await ctx.reply('MESSAGE FROM THE MINISTRY OF STATE\n(我们的) 100 Social Credits have been removed from your account!  Bad work citizen, Do not publicly disclose your opinion which can make our holy state look bad. Glory to the Chinese Communist Party! https://cdn.discordapp.com/attachments/780610992388177920/1032776850503639131/CCP.mp4')
             await self.update_credit(ctx.author, -10000)
         elif content in good_citizen:
-            await ctx.reply('MESSAGE FROM THE MINISTRY OF STATE\n(我们的) 15 Social Credits have been added to your account! good work citizen. Glory to the Chinese Communist Party! https://cdn.discordapp.com/attachments/763740330629398588/865242744162484254/CCP.mp4')
+            await ctx.reply('MESSAGE FROM THE MINISTRY OF STATE\n(我们的) 15 Social Credits have been added to your account! good work citizen. Glory to the Chinese Communist Party! https://cdn.discordapp.com/attachments/780610992388177920/1032776850503639131/CCP.mp4')
             await self.update_credit(ctx.author, 1500)
         elif  "social_credit" in content: pass
         else:
