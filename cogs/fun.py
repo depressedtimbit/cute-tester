@@ -22,6 +22,10 @@ class fun(commands.Cog):
     ]
     ))
 
+  @commands.slash_command(name="badge-command", description='command that gets me a funny badge')
+  async def badge_command(self, ctx):
+    await ctx.respond("fuck discord lmao heres ur global slash command https://the-depressed.one/static/bloombirth/Joyeux%20anniversaire%20de%20la%20part%20des%20Minions.mp4")
+
   @commands.command()
   async def FF(self, ctx):
     await ctx.message.reply(random.choice(final_fantasy_list))

@@ -7,8 +7,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-client = discord.Client()
-
 client = commands.Bot(
 command_prefix = commands.when_mentioned_or('!cute '),
 help_command = None,
@@ -26,6 +24,7 @@ for file in os.listdir("cute-tester/cogs"):
         print(f'loaded {name}')
 
 status = cycle(['fortnight','ur mom', 'TF2', 'the other TF2'])
+
 
 @client.event 
 async def on_command_error(ctx, error):
